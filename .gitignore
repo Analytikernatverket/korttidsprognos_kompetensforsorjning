@@ -1,0 +1,9 @@
+.Rproj.user
+.Rhistory
+.RData
+.RDataTmp
+.Ruserdata
+tmpFiler/*
+Resultatfiler/*
+Backup.zip
+koefficienter.xlsx
