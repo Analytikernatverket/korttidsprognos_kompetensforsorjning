@@ -6,4 +6,5 @@ I framskrivningen tar prognosedn varken hänsyn till konjunkturens utveckling el
 Prognosresultatet ska ses som ett diskussionsunderlag och inte som ett facit på den framtida utvecklingen av den arbetsmarknaden. Prognosen kan användas som underlag till kvalitativa bedömningar och tillsammans ger dessa en helhetsprognos
 
 För närmare beskrivning av modellen se Wiki.
+
 Modellen kan hämtas som ett publicerat paket där senasate fungerande versionen finns.
