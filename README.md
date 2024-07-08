@@ -7,4 +7,6 @@ Prognosresultatet ska ses som ett diskussionsunderlag och inte som ett facit på
 
 För närmare beskrivning av modellen se Wiki.
 
-Modellen kan hämtas som ett publicerat paket där senasate fungerande versionen finns.
+Modellen kan hämtas som Releases där senasate fungerande versionen finns.
+
+Modellen är utvecklad på Region Skånes enhet för Samhällsanalys.
