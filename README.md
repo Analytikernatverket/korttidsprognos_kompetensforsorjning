@@ -9,6 +9,6 @@ För närmare beskrivning av modellen se Wiki.
 
 Modellen kan hämtas som Releases där senasate fungerande versionen finns.
 
-Modellen är utvecklad på Region Skånes enhet för Samhällsanalys.
+För utvecklare. Innan du börjar bygga vidare på modellen, ta kontakt med anders.bergquist@skane.se så vi kan koordinera jobbet.
 
-För utvecklare. Innan ni börjar bygga vidare på modellen, ta kontakt med anders.bergquist@skane.se så vi kan koordinera jobbet.
+Modellen är utvecklad på Region Skånes enhet för Samhällsanalys.
