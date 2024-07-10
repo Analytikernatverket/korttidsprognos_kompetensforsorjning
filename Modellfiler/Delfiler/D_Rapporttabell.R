@@ -85,7 +85,7 @@ writeData(prognosWb, sheet="Pedagogik och lärarutbildning", x=dfresultatPrognos
 writeData(prognosWb, sheet="Hälso- och sjukvård samt ...", x=dfresultatPrognos %>% filter(utbildningsgrupp=="S") %>% arrange(sunRuapGrp, regiondelNamn))
 writeData(prognosWb, sheet="Teknik, naturvetenskap och data", x=dfresultatPrognos %>% filter(utbildningsgrupp=="N") %>% arrange(sunRuapGrp, regiondelNamn))
 writeData(prognosWb, sheet="Humaniora, samhällsvetenskap...", x=dfresultatPrognos %>% filter(utbildningsgrupp=="H") %>% arrange(sunRuapGrp, regiondelNamn))
-writeData(prognosWb, sheet="Samtliga regiondelar", x=dfresultatPrognos)
+writeData(prognosWb, sheet="Samtliga regiondelar", x=dfresultatPrognos %>% slice_max(order_by=inTotalt, n=antalUtbGrp) %>% filter(inTotalt >= minAntalIUtbGrp))
 formatCellXLSX(workbook=prognosWb, flik="Nordvästra Skåne", df=dfresultatPrognos %>% filter(regiondelNamn=="Nordvästra Skåne"))
 formatCellXLSX(workbook=prognosWb, flik="Sydvästra Skåne", df=dfresultatPrognos %>% filter(regiondelNamn=="Sydvästra Skåne"))
 formatCellXLSX(workbook=prognosWb, flik="Nordöstra Skåne", df=dfresultatPrognos %>% filter(regiondelNamn=="Nordöstra Skåne"))
