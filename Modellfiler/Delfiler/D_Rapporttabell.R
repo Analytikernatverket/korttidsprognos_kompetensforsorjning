@@ -7,6 +7,7 @@ library(sqldf)
 
 #Läser in prognosresultatet
 source(".//Modellfiler/Hjälpfiler/inlasningStyrvariabler.R", encoding = 'UTF-8')
+source(".//Modellfiler/Delfiler/D_RapportHjälpfiler/funktioner.R")
 dfutbudArAlder <- read.xlsx("./tmpFiler/ResultatUtbudsprognos.xlsx", sheet="PrognosData")
 
 slutAr <- as.numeric(format(Sys.Date(), "%Y")) - 1 + prognosperiod
@@ -52,13 +53,17 @@ dfresultatPrognos <- dfPrognosPoang %>%
   drop_na(inTotalt)
 
 #Begränsar resultatet till max antal utbildningar per delregion eller utbildningar med mer än en undre gräns av antal.
-dfresultatPrognos <- dfresultatPrognos  %>%
-  group_by(regiondelNamn) %>%
-  slice_max(order_by=inTotalt, n=antalUtbGrp) %>%
-  ungroup()
+#Testar med att göra begränsningen i utskriften för att inte begränsa redovisning efter utbildning.
+#BÖR DISKUTERAS VILKET SOM ÄR BÄST
+#dfresultatPrognos <- dfresultatPrognos  %>%
+#  group_by(regiondelNamn) %>%
+#  slice_max(order_by=inTotalt, n=antalUtbGrp) %>%
+#  ungroup() %>%
+#  filter(inTotalt >= minAntalIUtbGrp)
 
-dfresultatPrognos <- dfresultatPrognos %>%
-  filter(inTotalt >= minAntalIUtbGrp)
+#Testa om ovan med filter på slutet fungerar.
+#dfresultatPrognos <- dfresultatPrognos %>%
+#  filter(inTotalt >= minAntalIUtbGrp)
 
 prognosWb <- createWorkbook()
 addWorksheet(prognosWb, "Nordvästra Skåne")
@@ -71,16 +76,26 @@ addWorksheet(prognosWb, "Hälso- och sjukvård samt ...")
 addWorksheet(prognosWb, "Teknik, naturvetenskap och data")
 addWorksheet(prognosWb, "Humaniora, samhällsvetenskap...")
 addWorksheet(prognosWb, "Samtliga regiondelar")
-writeData(prognosWb, sheet="Nordvästra Skåne", x=dfresultatPrognos %>% filter(regiondelNamn=="Nordvästra Skåne"))
-writeData(prognosWb, sheet="Sydvästra Skåne", x=dfresultatPrognos %>% filter(regiondelNamn=="Sydvästra Skåne"))
-writeData(prognosWb, sheet="Nordöstra Skåne", x=dfresultatPrognos %>% filter(regiondelNamn=="Nordöstra Skåne"))
-writeData(prognosWb, sheet="Sydöstra Skåne", x=dfresultatPrognos %>% filter(regiondelNamn=="Sydöstra Skåne"))
-writeData(prognosWb, sheet="Gymnasial utbildning", x=dfresultatPrognos %>% filter(utbildningsgrupp=="G"))
-writeData(prognosWb, sheet="Pedagogik och lärarutbildning", x=dfresultatPrognos %>% filter(utbildningsgrupp=="L"))
-writeData(prognosWb, sheet="Hälso- och sjukvård samt ...", x=dfresultatPrognos %>% filter(utbildningsgrupp=="S"))
-writeData(prognosWb, sheet="Teknik, naturvetenskap och data", x=dfresultatPrognos %>% filter(utbildningsgrupp=="N"))
-writeData(prognosWb, sheet="Humaniora, samhällsvetenskap...", x=dfresultatPrognos %>% filter(utbildningsgrupp=="H"))
+writeData(prognosWb, sheet="Nordvästra Skåne", x=dfresultatPrognos %>% filter(regiondelNamn=="Nordvästra Skåne") %>% arrange(utbildningsgrupp, sunRuapGrp) %>% slice_max(order_by=inTotalt, n=antalUtbGrp) %>% filter(inTotalt >= minAntalIUtbGrp))
+writeData(prognosWb, sheet="Sydvästra Skåne", x=dfresultatPrognos %>% filter(regiondelNamn=="Sydvästra Skåne") %>% arrange(utbildningsgrupp, sunRuapGrp) %>% slice_max(order_by=inTotalt, n=antalUtbGrp) %>% filter(inTotalt >= minAntalIUtbGrp))
+writeData(prognosWb, sheet="Nordöstra Skåne", x=dfresultatPrognos %>% filter(regiondelNamn=="Nordöstra Skåne") %>% arrange(utbildningsgrupp, sunRuapGrp) %>% slice_max(order_by=inTotalt, n=antalUtbGrp) %>% filter(inTotalt >= minAntalIUtbGrp))
+writeData(prognosWb, sheet="Sydöstra Skåne", x=dfresultatPrognos %>% filter(regiondelNamn=="Sydöstra Skåne") %>% arrange(utbildningsgrupp, sunRuapGrp) %>% slice_max(order_by=inTotalt, n=antalUtbGrp) %>% filter(inTotalt >= minAntalIUtbGrp))
+writeData(prognosWb, sheet="Gymnasial utbildning", x=dfresultatPrognos %>% filter(utbildningsgrupp=="G") %>% arrange(sunRuapGrp, regiondelNamn))
+writeData(prognosWb, sheet="Pedagogik och lärarutbildning", x=dfresultatPrognos %>% filter(utbildningsgrupp=="L") %>% arrange(sunRuapGrp, regiondelNamn))
+writeData(prognosWb, sheet="Hälso- och sjukvård samt ...", x=dfresultatPrognos %>% filter(utbildningsgrupp=="S") %>% arrange(sunRuapGrp, regiondelNamn))
+writeData(prognosWb, sheet="Teknik, naturvetenskap och data", x=dfresultatPrognos %>% filter(utbildningsgrupp=="N") %>% arrange(sunRuapGrp, regiondelNamn))
+writeData(prognosWb, sheet="Humaniora, samhällsvetenskap...", x=dfresultatPrognos %>% filter(utbildningsgrupp=="H") %>% arrange(sunRuapGrp, regiondelNamn))
 writeData(prognosWb, sheet="Samtliga regiondelar", x=dfresultatPrognos)
+formatCellXLSX(workbook=prognosWb, flik="Nordvästra Skåne", df=dfresultatPrognos %>% filter(regiondelNamn=="Nordvästra Skåne"))
+formatCellXLSX(workbook=prognosWb, flik="Sydvästra Skåne", df=dfresultatPrognos %>% filter(regiondelNamn=="Sydvästra Skåne"))
+formatCellXLSX(workbook=prognosWb, flik="Nordöstra Skåne", df=dfresultatPrognos %>% filter(regiondelNamn=="Nordöstra Skåne"))
+formatCellXLSX(workbook=prognosWb, flik="Sydöstra Skåne", df=dfresultatPrognos %>% filter(regiondelNamn=="Sydöstra Skåne"))
+formatCellXLSX(workbook=prognosWb, flik="Gymnasial utbildning", df=dfresultatPrognos %>% filter(utbildningsgrupp=="G"))
+formatCellXLSX(workbook=prognosWb, flik="Pedagogik och lärarutbildning", df=dfresultatPrognos %>% filter(utbildningsgrupp=="L"))
+formatCellXLSX(workbook=prognosWb, flik="Hälso- och sjukvård samt ...", df=dfresultatPrognos %>% filter(utbildningsgrupp=="S"))
+formatCellXLSX(workbook=prognosWb, flik="Teknik, naturvetenskap och data", df=dfresultatPrognos %>% filter(utbildningsgrupp=="N"))
+formatCellXLSX(workbook=prognosWb, flik="Humaniora, samhällsvetenskap...", df=dfresultatPrognos %>% filter(utbildningsgrupp=="H"))
+formatCellXLSX(workbook=prognosWb, flik="Samtliga regiondelar", df=dfresultatPrognos)
 saveWorkbook(prognosWb, "./Resultatfiler/prognosresultat.xlsx", overwrite = TRUE)
 
 wbHelaPrognos <- createWorkbook()
@@ -93,6 +108,7 @@ rm(aldersGrupp, dfEFterfraganPoang, dfPrognosPoang, dfresultatPrognos, dfUtbgrp,
 rm(dfutbudArAlder, dfUtbudPoang, kommunGrupper, sunRuapGrpNamn, wbHelaPrognos)
 rm(antalUtbGrp, basArSkattning, maxAlder, minAlder, PGMatchning, PGRelativlon, PGUtbud, prognosperiod, prognosWb)
 rm(minAntalIUtbGrp, sistObsAr, skattningsperiod, slutAr)
+rm(formatCellXLSX)
 
 sluttid <- Sys.time()
 kortid <- difftime(sluttid, starttid, units = "secs")
