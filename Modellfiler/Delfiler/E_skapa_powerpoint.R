@@ -70,7 +70,7 @@ for (rad in 1:nrow(dfRegiondelar)) {
   
   lista <- lkortprogn[[i]]
   
-  print(paste("Skapar bild", i , "av", length(lkortprogn)))
+  print(paste("Skapar bild", i , "av", length(lkortprogn), "för", region))
   
   my_pres <- my_pres %>% 
     add_slide(layout = "prognospresentation", master = "Region Skåne presentation") %>% 

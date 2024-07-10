@@ -12,9 +12,7 @@ sistObsAr <- dfSistObsAr[1,]
 
 
 # Läser in styrvariablerna.
-kommunGrupper <- read.xlsx("./Konfiguration/styrfil.xlsx", sheet = "omraden") %>%
-  mutate(Regiondel_namn=case_when(is.na(Regiondel_namn) ~ "Övriga Sverige",
-                                  TRUE ~ Regiondel_namn))
+kommunGrupper <- read.xlsx("./Konfiguration/styrfil.xlsx", sheet = "omraden")
 dfUtbildningsgrupper <- read.xlsx("./Konfiguration/styrfil.xlsx", sheet = "utbildningsgrupper")
 dfUtbildningsgrupperNyckel <- read.xlsx("./Konfiguration/styrfil.xlsx", sheet = "utbildningsgrupperNycklar")
 styrVariabler <- read.xlsx("./Konfiguration/styrfil.xlsx", sheet = "styrVariabler")
