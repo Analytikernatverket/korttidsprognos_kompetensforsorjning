@@ -37,6 +37,7 @@ dfresultatPrognos <- dfPrognosPoang %>%
          utTotalt,
          procentDiffTotal,
          relativDiffUtbud,
+         relativLon,
          matchadForvarvsgrad,
          relMartchUtv,
          matchUtveckling,
@@ -85,17 +86,17 @@ writeData(prognosWb, sheet="Pedagogik och lärarutbildning", x=dfresultatPrognos
 writeData(prognosWb, sheet="Hälso- och sjukvård samt ...", x=dfresultatPrognos %>% filter(utbildningsgrupp=="S") %>% arrange(sunRuapGrp, regiondelNamn))
 writeData(prognosWb, sheet="Teknik, naturvetenskap och data", x=dfresultatPrognos %>% filter(utbildningsgrupp=="N") %>% arrange(sunRuapGrp, regiondelNamn))
 writeData(prognosWb, sheet="Humaniora, samhällsvetenskap...", x=dfresultatPrognos %>% filter(utbildningsgrupp=="H") %>% arrange(sunRuapGrp, regiondelNamn))
-writeData(prognosWb, sheet="Samtliga regiondelar", x=dfresultatPrognos %>% slice_max(order_by=inTotalt, n=antalUtbGrp) %>% filter(inTotalt >= minAntalIUtbGrp))
-formatCellXLSX(workbook=prognosWb, flik="Nordvästra Skåne", df=dfresultatPrognos %>% filter(regiondelNamn=="Nordvästra Skåne"))
-formatCellXLSX(workbook=prognosWb, flik="Sydvästra Skåne", df=dfresultatPrognos %>% filter(regiondelNamn=="Sydvästra Skåne"))
-formatCellXLSX(workbook=prognosWb, flik="Nordöstra Skåne", df=dfresultatPrognos %>% filter(regiondelNamn=="Nordöstra Skåne"))
-formatCellXLSX(workbook=prognosWb, flik="Sydöstra Skåne", df=dfresultatPrognos %>% filter(regiondelNamn=="Sydöstra Skåne"))
+writeData(prognosWb, sheet="Samtliga regiondelar", x=dfresultatPrognos %>% group_by(regiondelNamn) %>% slice_max(order_by=inTotalt, n=antalUtbGrp) %>% filter(inTotalt >= minAntalIUtbGrp) %>% ungroup())
+formatCellXLSX(workbook=prognosWb, flik="Nordvästra Skåne", df=dfresultatPrognos %>% filter(regiondelNamn=="Nordvästra Skåne") %>% arrange(utbildningsgrupp, sunRuapGrp) %>% slice_max(order_by=inTotalt, n=antalUtbGrp) %>% filter(inTotalt >= minAntalIUtbGrp))
+formatCellXLSX(workbook=prognosWb, flik="Sydvästra Skåne", df=dfresultatPrognos %>% filter(regiondelNamn=="Sydvästra Skåne") %>% arrange(utbildningsgrupp, sunRuapGrp) %>% slice_max(order_by=inTotalt, n=antalUtbGrp) %>% filter(inTotalt >= minAntalIUtbGrp))
+formatCellXLSX(workbook=prognosWb, flik="Nordöstra Skåne", df=dfresultatPrognos %>% filter(regiondelNamn=="Nordöstra Skåne") %>% arrange(utbildningsgrupp, sunRuapGrp) %>% slice_max(order_by=inTotalt, n=antalUtbGrp) %>% filter(inTotalt >= minAntalIUtbGrp))
+formatCellXLSX(workbook=prognosWb, flik="Sydöstra Skåne", df=dfresultatPrognos %>% filter(regiondelNamn=="Sydöstra Skåne") %>% arrange(utbildningsgrupp, sunRuapGrp) %>% slice_max(order_by=inTotalt, n=antalUtbGrp) %>% filter(inTotalt >= minAntalIUtbGrp))
 formatCellXLSX(workbook=prognosWb, flik="Gymnasial utbildning", df=dfresultatPrognos %>% filter(utbildningsgrupp=="G"))
 formatCellXLSX(workbook=prognosWb, flik="Pedagogik och lärarutbildning", df=dfresultatPrognos %>% filter(utbildningsgrupp=="L"))
 formatCellXLSX(workbook=prognosWb, flik="Hälso- och sjukvård samt ...", df=dfresultatPrognos %>% filter(utbildningsgrupp=="S"))
 formatCellXLSX(workbook=prognosWb, flik="Teknik, naturvetenskap och data", df=dfresultatPrognos %>% filter(utbildningsgrupp=="N"))
 formatCellXLSX(workbook=prognosWb, flik="Humaniora, samhällsvetenskap...", df=dfresultatPrognos %>% filter(utbildningsgrupp=="H"))
-formatCellXLSX(workbook=prognosWb, flik="Samtliga regiondelar", df=dfresultatPrognos)
+formatCellXLSX(workbook=prognosWb, flik="Samtliga regiondelar", df=dfresultatPrognos %>% group_by(regiondelNamn) %>% slice_max(order_by=inTotalt, n=antalUtbGrp) %>% filter(inTotalt >= minAntalIUtbGrp) %>% ungroup())
 saveWorkbook(prognosWb, "./Resultatfiler/prognosresultat.xlsx", overwrite = TRUE)
 
 wbHelaPrognos <- createWorkbook()
